@@ -12,6 +12,7 @@ app.use(logger);
 
 // Routes
 app.use('/api/posts', require('./routes/posts'));
+app.use('/api/users', require('./routes/users'));
 
 // 404 handler
 app.use((_req, res) => {
