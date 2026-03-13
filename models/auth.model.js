@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        trim: true,
-        minlength: 3,
-        maxlength: 255
-    },
+const authSchema = new mongoose.Schema({
     email: {
         type: String,
         minlength: 5,
@@ -22,4 +16,4 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Auth', authSchema);
