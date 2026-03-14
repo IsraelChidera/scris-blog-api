@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const _ = require('lodash');
 const User = require('../models/user.model');
 const { hashPassword } = require('../config/hash');
@@ -20,7 +22,9 @@ const createUser = async (req, res) => {
         user.password = await hashPassword(user.password);
         await user.save();
 
-        res.status(201).json(_.pick(user, ['_id', 'name', 'email']));
+        const token = user.generateAuthToken();
+        res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+
     } catch (error) {
         if (error.code === 11000) return res.status(409).json({ error: 'Email already exists' });
         res.status(500).json({ error: 'Server error' });

@@ -1,0 +1,5 @@
+{
+    "port": 8080,
+    "mongoURI": "mongodb://localhost:27017/playground",
+    "jwtSecret": "scris_jwtsecretkey"
+}

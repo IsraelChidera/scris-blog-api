@@ -1,4 +1,5 @@
 const express = require('express');
+const config = require('config');
 const dotenv = require('dotenv');
 dotenv.config();
 const mongoose = require('mongoose');
@@ -9,6 +10,11 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(logger);
+
+if(!config.get('jwtSecret')) {
+    console.error('FATAL ERROR: JWT SECRET is not defined.');
+    process.exit(1);
+}
 
 // Routes
 app.use('/api/posts', require('./routes/posts'));

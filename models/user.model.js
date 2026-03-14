@@ -21,5 +21,8 @@ const userSchema = new mongoose.Schema({
         maxlength: 1024
     },
 });
-
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id }, config.get('jwtSecret'), { expiresIn: '1h' });
+    return token;
+};
 module.exports = mongoose.model('User', userSchema);
