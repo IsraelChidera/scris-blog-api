@@ -1,8 +1,7 @@
-const jwt = require('jsonwebtoken');
-const config = require('config');
 const _ = require('lodash');
 const User = require('../models/user.model');
 const { hashPassword } = require('../config/hash');
+const userSchema = require('../schemas/user.schema');
 
 const getAllUsers = async (req, res) => {
     try {
@@ -15,6 +14,9 @@ const getAllUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
+        const { error } = userSchema.validate(req.body);
+        if (error) return res.status(400).json({ error: error.details[0].message });
+
         const existingUser = await User.findOne({ email: req.body.email });
         if (existingUser) return res.status(400).json({ error: 'Email already exists' });
 
@@ -25,10 +27,21 @@ const createUser = async (req, res) => {
         const token = user.generateAuthToken();
         res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 
+        return res.json({ user: _.pick(user, ['_id', 'name', 'email']), token })
     } catch (error) {
-        if (error.code === 11000) return res.status(409).json({ error: 'Email already exists' });
+        console.log(error);
         res.status(500).json({ error: 'Server error' });
     }
 };
 
-module.exports = { getAllUsers, createUser };
+const getCurrentUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password');
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+module.exports = { getAllUsers, createUser, getCurrentUser };

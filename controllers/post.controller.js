@@ -2,6 +2,7 @@ const Post = require('../models/post.model');
 
 const getAllPosts = async (req, res) => {
     try {
+       
         const posts = await Post.find();
         res.json(posts);
     } catch (err) {
