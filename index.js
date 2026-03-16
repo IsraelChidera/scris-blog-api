@@ -3,11 +3,15 @@ const config = require('config');
 const dotenv = require('dotenv');
 dotenv.config();
 const mongoose = require('mongoose');
+const cors = require('cors');
+const helmet = require('helmet');
 const logger = require('./middleware/logger');
 
 const app = express();
 
 // Middleware
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 app.use(logger);
 

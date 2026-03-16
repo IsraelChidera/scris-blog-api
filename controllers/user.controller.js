@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const User = require('../models/user.model');
 const { hashPassword } = require('../config/hash');
-const userSchema = require('../schemas/user.schema');
 
 const getAllUsers = async (req, res) => {
     try {
@@ -14,9 +13,6 @@ const getAllUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const { error } = userSchema.validate(req.body);
-        if (error) return res.status(400).json({ error: error.details[0].message });
-
         const existingUser = await User.findOne({ email: req.body.email });
         if (existingUser) return res.status(400).json({ error: 'Email already exists' });
 
@@ -25,9 +21,7 @@ const createUser = async (req, res) => {
         await user.save();
 
         const token = user.generateAuthToken();
-        res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
-
-        return res.json({ user: _.pick(user, ['_id', 'name', 'email']), token })
+        res.header('x-auth-token', token).status(201).json({ user: _.pick(user, ['_id', 'name', 'email']), token });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Server error' });

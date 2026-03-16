@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e \"require\\(''lodash''\\); require\\(''bcrypt''\\)\")"
+      "Bash(node -e \"require\\(''lodash''\\); require\\(''bcrypt''\\)\")",
+      "Bash(npm install:*)"
     ]
   }
 }

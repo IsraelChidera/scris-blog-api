@@ -5,7 +5,7 @@ const validate = require('../middleware/validate');
 const userSchema = require('../schemas/user.schema');
 const auth = require('../middleware/auth');
 
-router.get('/', getAllUsers);
+router.get('/', auth, getAllUsers);
 router.post('/', validate(userSchema), createUser);
 router.get("/me", auth, getCurrentUser);
 
