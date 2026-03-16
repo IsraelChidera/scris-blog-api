@@ -15,7 +15,8 @@ if (!email || !password) {
 const admin = { name: 'Admin', email, password };
 
 async function seed() {
-    await mongoose.connect(config.get('mongoURI'));
+    // await mongoose.connect(config.get('mongoURI'));
+    await mongoose.connect(`${process.env.mongoURI}`);
     console.log('Connected to MongoDB');
 
     const existing = await User.findOne({ email: admin.email });
