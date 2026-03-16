@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(logger);
 
-if(!config.get('jwtSecret')) {
+if (!config.get('jwtSecret')) {
     console.error('FATAL ERROR: JWT SECRET is not defined.');
     process.exit(1);
 }
@@ -24,6 +24,11 @@ if(!config.get('jwtSecret')) {
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
+
+// health check
+app.get("/api/health", (_req, res) => {
+    res.send("Working . . .");
+})
 
 // 404 handler
 app.use((_req, res) => {
