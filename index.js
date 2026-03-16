@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('./middleware/logger');
+const seedAdmin = require('./scripts/seed');
 
 const app = express();
 
@@ -43,8 +44,9 @@ app.use((err, _req, res, _next) => {
 
 
 mongoose.connect(config.get('mongoURI'))
-    .then(() => {
+    .then(async () => {
         console.log('Connected to MongoDB');
+        await seedAdmin();
         app.listen(config.get('port'), () => {
             console.log(`Server running on port ${config.get('port')}`);
         });
