@@ -5,8 +5,8 @@ const validate = require('../middleware/validate');
 const postSchema = require('../schemas/post.schema');
 const auth = require('../middleware/auth');
 
-router.get('/', auth, getAllPosts);
-router.get('/:id', auth, getPostById);
+router.get('/', getAllPosts);
+router.get('/:id', getPostById);
 router.post('/', auth, validate(postSchema), createPost);
 router.put('/:id', auth, validate(postSchema), updatePost);
 router.delete('/:id', auth, deletePost);
