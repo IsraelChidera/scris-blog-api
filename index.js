@@ -7,6 +7,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('./middleware/logger');
 const seedAdmin = require('./scripts/seed');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 const app = express();
 
@@ -25,6 +27,7 @@ if (!config.get('jwtSecret')) {
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // health check
 app.get("/api/health", (_req, res) => {
